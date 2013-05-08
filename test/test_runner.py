@@ -35,7 +35,7 @@ import daemon.daemon
 from daemon import pidlockfile
 from daemon import runner
 
-
+
 class Exception_TestCase(scaffold.Exception_TestCase):
     """ Test cases for module exception classes. """
 
@@ -62,7 +62,7 @@ class Exception_TestCase(scaffold.Exception_TestCase):
                 ),
             }
 
-
+
 def make_runner_scenarios():
     """ Make a collection of scenarios for testing DaemonRunner instances. """
 
@@ -88,7 +88,7 @@ def make_runner_scenarios():
 
     return scenarios
 
-
+
 def set_runner_scenario(testcase, scenario_name, clear_tracker=True):
     """ Set the DaemonRunner test scenario for the test case. """
     scenarios = testcase.runner_scenarios
@@ -197,7 +197,7 @@ def setup_runner_fixtures(testcase):
 
     testcase.scenario = NotImplemented
 
-
+
 class DaemonRunner_TestCase(scaffold.TestCase):
     """ Test cases for DaemonRunner class. """
 
@@ -332,7 +332,7 @@ class DaemonRunner_TestCase(scaffold.TestCase):
         self.failUnlessEqual(
             expect_buffering, daemon_context.stderr.buffering)
 
-
+
 class DaemonRunner_usage_exit_TestCase(scaffold.TestCase):
     """ Test cases for DaemonRunner.usage_exit method. """
 
@@ -367,7 +367,7 @@ class DaemonRunner_usage_exit_TestCase(scaffold.TestCase):
         self.failUnlessOutputCheckerMatch(
             expect_stderr_output, self.mock_stderr.getvalue())
 
-
+
 class DaemonRunner_parse_args_TestCase(scaffold.TestCase):
     """ Test cases for DaemonRunner.parse_args method. """
 
@@ -432,7 +432,7 @@ class DaemonRunner_parse_args_TestCase(scaffold.TestCase):
             instance.parse_args(argv)
             self.failUnlessEqual(expect_action, instance.action)
 
-
+
 class DaemonRunner_do_action_TestCase(scaffold.TestCase):
     """ Test cases for DaemonRunner.do_action method. """
 

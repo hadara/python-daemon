@@ -42,7 +42,7 @@ if not parent_dir in sys.path:
 # Disable all but the most critical logging messages
 logging.disable(logging.CRITICAL)
 
-
+
 def get_python_module_names(file_list, file_suffix=u'.py'):
     """ Return a list of module names from a filename list. """
     module_names = [m[:m.rfind(file_suffix)] for m in file_list
@@ -66,7 +66,7 @@ def make_suite(path=test_dir):
 
     return suite
 
-
+
 def get_function_signature(func):
     """ Get the function signature as a mapping of attributes. """
     arg_count = func.func_code.co_argcount
@@ -121,7 +121,7 @@ def format_function_signature(func):
 
     return signature_text
 
-
+
 class TestCase(unittest.TestCase):
     """ Test case behaviour. """
 
@@ -369,7 +369,7 @@ class TestCase(unittest.TestCase):
 
     assertFunctionSignatureMatch = failUnlessFunctionSignatureMatch
 
-
+
 class Exception_TestCase(TestCase):
     """ Test cases for exception classes. """
 
