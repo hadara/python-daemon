@@ -318,7 +318,7 @@ def set_pidlockfile_scenario(testcase, scenario_name, clear_tracker=True):
     """ Set up the test case to the specified scenario. """
     testcase.scenario = testcase.pidlockfile_scenarios[scenario_name]
     setup_lockfile_method_mocks(
-        testcase, testcase.scenario, u"lockfile.LinkFileLock")
+        testcase, testcase.scenario, u"lockfile.linklockfile.LinkLockFile")
     testcase.pidlockfile_args = dict(
         path=testcase.scenario['path'],
         )
@@ -344,10 +344,10 @@ class PIDLockFile_TestCase(scaffold.TestCase):
         instance = self.test_instance
         self.failUnlessIsInstance(instance, pidlockfile.PIDLockFile)
 
-    def test_inherits_from_linkfilelock(self):
-        """ Should inherit from LinkFileLock. """
+    def test_inherits_from_linklockfile(self):
+        """ Should inherit from LinkLockFile. """
         instance = self.test_instance
-        self.failUnlessIsInstance(instance, lockfile.LinkFileLock)
+        self.failUnlessIsInstance(instance, lockfile.linklockfile.LinkLockFile)
 
     def test_has_specified_path(self):
         """ Should have specified path. """
@@ -388,22 +388,22 @@ class PIDLockFile_acquire_TestCase(scaffold.TestCase):
         """ Tear down test fixtures. """
         scaffold.mock_restore()
 
-    def test_calls_linkfilelock_acquire(self):
-        """ Should first call LinkFileLock.acquire method. """
+    def test_calls_linklockfile_acquire(self):
+        """ Should first call LinkLockFile.acquire method. """
         instance = self.test_instance
         expect_mock_output = u"""\
-            Called lockfile.LinkFileLock.acquire()
+            Called lockfile.linklockfile.LinkLockFile.acquire()
             ...
             """
         instance.acquire()
         self.failUnlessMockCheckerMatch(expect_mock_output)
 
-    def test_calls_linkfilelock_acquire_with_timeout(self):
-        """ Should call LinkFileLock.acquire method with specified timeout. """
+    def test_calls_linklockfile_acquire_with_timeout(self):
+        """ Should call LinkLockFile.acquire method with specified timeout. """
         instance = self.test_instance
         test_timeout = object()
         expect_mock_output = u"""\
-            Called lockfile.LinkFileLock.acquire(timeout=%(test_timeout)r)
+            Called lockfile.linklockfile.LinkLockFile.acquire(timeout=%(test_timeout)r)
             ...
             """ % vars()
         instance.acquire(timeout=test_timeout)
@@ -486,13 +486,13 @@ class PIDLockFile_release_TestCase(scaffold.TestCase):
         instance.release()
         self.failUnlessMockCheckerMatch(expect_mock_output)
 
-    def test_calls_linkfilelock_release(self):
-        """ Should finally call LinkFileLock.release method. """
+    def test_calls_linklockfile_release(self):
+        """ Should finally call LinkLockFile.release method. """
         set_pidlockfile_scenario(self, 'exist-current-pid-locked')
         instance = self.test_instance
         expect_mock_output = u"""\
             ...
-            Called lockfile.LinkFileLock.release()
+            Called lockfile.linklockfile.LinkLockFile.release()
             """
         instance.release()
         self.failUnlessMockCheckerMatch(expect_mock_output)
@@ -510,11 +510,11 @@ class PIDLockFile_break_lock_TestCase(scaffold.TestCase):
         """ Tear down test fixtures. """
         scaffold.mock_restore()
 
-    def test_calls_linkfilelock_break_lock(self):
-        """ Should first call LinkFileLock.break_lock method. """
+    def test_calls_linklockfile_break_lock(self):
+        """ Should first call LinkLockFile.break_lock method. """
         instance = self.test_instance
         expect_mock_output = u"""\
-            Called lockfile.LinkFileLock.break_lock()
+            Called lockfile.linklockfile.LinkLockFile.break_lock()
             ...
             """
         instance.break_lock()

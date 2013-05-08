@@ -16,7 +16,9 @@
 import os
 import errno
 
-from lockfile import LinkFileLock, AlreadyLocked, LockFailed, NotLocked, NotMyLock
+from lockfile import AlreadyLocked, LockFailed, NotLocked, NotMyLock
+
+from lockfile.linklockfile import LinkLockFile
 
 class PIDFileError(Exception):
     """ Abstract base class for errors specific to PID files. """
@@ -25,7 +27,7 @@ class PIDFileParseError(ValueError, PIDFileError):
     """ Raised when parsing contents of PID file fails. """
 
 
-class PIDLockFile(LinkFileLock, object):
+class PIDLockFile(LinkLockFile, object):
     """ Lockfile implemented as a Unix PID file.
 
         The PID file is named by the attribute `path`. When locked,
@@ -33,7 +35,7 @@ class PIDLockFile(LinkFileLock, object):
         containing the process ID (PID) of the process that acquired
         the lock.
 
-        The lock is acquired and maintained as per `LinkFileLock`.
+        The lock is acquired and maintained as per `LinkLockFile`.
 
         """
 
@@ -48,7 +50,7 @@ class PIDLockFile(LinkFileLock, object):
 
             Locks the PID file then creates the PID file for this
             lock. The `timeout` parameter is used as for the
-            `LinkFileLock` class.
+            `LinkLockFile` class.
 
             """
         super(PIDLockFile, self).acquire(*args, **kwargs)
