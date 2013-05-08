@@ -16,20 +16,15 @@
 import os
 import errno
 
-from lockfile import (
-    LinkFileLock,
-    AlreadyLocked, LockFailed,
-    NotLocked, NotMyLock,
-    )
+from lockfile import LinkFileLock, AlreadyLocked, LockFailed, NotLocked, NotMyLock
 
-
 class PIDFileError(Exception):
     """ Abstract base class for errors specific to PID files. """
 
 class PIDFileParseError(ValueError, PIDFileError):
     """ Raised when parsing contents of PID file fails. """
 
-
+
 class PIDLockFile(LinkFileLock, object):
     """ Lockfile implemented as a Unix PID file.
 
@@ -59,8 +54,8 @@ class PIDLockFile(LinkFileLock, object):
         super(PIDLockFile, self).acquire(*args, **kwargs)
         try:
             write_pid_to_pidfile(self.path)
-        except OSError, exc:
-            error = LockFailed(u"%(exc)s" % vars())
+        except OSError as exc:
+            error = LockFailed("%(exc)s" % vars())
             raise error
 
     def release(self):
@@ -84,7 +79,7 @@ class PIDLockFile(LinkFileLock, object):
         super(PIDLockFile, self).break_lock()
         remove_existing_pidfile(self.path)
 
-
+
 class TimeoutPIDLockFile(PIDLockFile):
     """ Lockfile with default timeout, implemented as a Unix PID file.
 
@@ -108,7 +103,7 @@ class TimeoutPIDLockFile(PIDLockFile):
             timeout = self.acquire_timeout
         super(TimeoutPIDLockFile, self).acquire(timeout, *args, **kwargs)
 
-
+
 def read_pid_from_pidfile(pidfile_path):
     """ Read the PID recorded in the named PID file.
 
@@ -121,7 +116,7 @@ def read_pid_from_pidfile(pidfile_path):
     pidfile = None
     try:
         pidfile = open(pidfile_path, 'r')
-    except IOError, exc:
+    except IOError as exc:
         if exc.errno == errno.ENOENT:
             pass
         else:
@@ -143,7 +138,7 @@ def read_pid_from_pidfile(pidfile_path):
             pid = int(line)
         except ValueError:
             raise PIDFileParseError(
-                u"PID file %(pidfile_path)r contents invalid" % vars())
+                "PID file %(pidfile_path)r contents invalid" % vars())
         pidfile.close()
 
     return pid
@@ -172,7 +167,7 @@ def write_pid_to_pidfile(pidfile_path):
     #   would contain three characters: two, five, and newline.
 
     pid = os.getpid()
-    line = u"%(pid)d\n" % vars()
+    line = "%(pid)d\n" % vars()
     pidfile.write(line)
     pidfile.close()
 
@@ -187,7 +182,7 @@ def remove_existing_pidfile(pidfile_path):
         """
     try:
         os.remove(pidfile_path)
-    except OSError, exc:
+    except OSError as exc:
         if exc.errno == errno.ENOENT:
             pass
         else:

@@ -26,7 +26,6 @@ import signal
 import socket
 import atexit
 
-
 class DaemonError(Exception):
     """ Base exception class for errors from this module. """
 
@@ -38,7 +37,7 @@ class DaemonOSEnvironmentError(DaemonError, OSError):
 class DaemonProcessDetachError(DaemonError, OSError):
     """ Exception raised when process detach fails. """
 
-
+
 class DaemonContext(object):
     """ Context for turning the current program into a daemon process.
 
@@ -206,7 +205,7 @@ class DaemonContext(object):
     def __init__(
         self,
         chroot_directory=None,
-        working_directory=u'/',
+        working_directory='/',
         umask=0,
         uid=None,
         gid=None,
@@ -394,7 +393,7 @@ class DaemonContext(object):
 
             """
         exception = SystemExit(
-            u"Terminating on signal %(signal_number)r"
+            "Terminating on signal %(signal_number)r"
                 % vars())
         raise exception
 
@@ -441,7 +440,7 @@ class DaemonContext(object):
             """
         if target is None:
             result = signal.SIG_IGN
-        elif isinstance(target, basestring):
+        elif isinstance(target, str):
             name = target
             result = getattr(self, name)
         else:
@@ -462,15 +461,15 @@ class DaemonContext(object):
             for (signal_number, target) in self.signal_map.items())
         return signal_handler_map
 
-
+
 def change_working_directory(directory):
     """ Change the working directory of this process.
         """
     try:
         os.chdir(directory)
-    except Exception, exc:
+    except Exception as exc:
         error = DaemonOSEnvironmentError(
-            u"Unable to change working directory (%(exc)s)"
+            "Unable to change working directory (%(exc)s)"
             % vars())
         raise error
 
@@ -486,9 +485,9 @@ def change_root_directory(directory):
     try:
         os.chdir(directory)
         os.chroot(directory)
-    except Exception, exc:
+    except Exception as exc:
         error = DaemonOSEnvironmentError(
-            u"Unable to change root directory (%(exc)s)"
+            "Unable to change root directory (%(exc)s)"
             % vars())
         raise error
 
@@ -498,9 +497,9 @@ def change_file_creation_mask(mask):
         """
     try:
         os.umask(mask)
-    except Exception, exc:
+    except Exception as exc:
         error = DaemonOSEnvironmentError(
-            u"Unable to change file creation mask (%(exc)s)"
+            "Unable to change file creation mask (%(exc)s)"
             % vars())
         raise error
 
@@ -516,13 +515,13 @@ def change_process_owner(uid, gid):
     try:
         os.setgid(gid)
         os.setuid(uid)
-    except Exception, exc:
+    except Exception as exc:
         error = DaemonOSEnvironmentError(
-            u"Unable to change file creation mask (%(exc)s)"
+            "Unable to change file creation mask (%(exc)s)"
             % vars())
         raise error
 
-
+
 def prevent_core_dump():
     """ Prevent this process from generating a core dump.
 
@@ -537,9 +536,9 @@ def prevent_core_dump():
         # Ensure the resource limit exists on this platform, by requesting
         # its current value
         core_limit_prev = resource.getrlimit(core_resource)
-    except ValueError, exc:
+    except ValueError as exc:
         error = DaemonOSEnvironmentError(
-            u"System does not support RLIMIT_CORE resource limit (%(exc)s)"
+            "System does not support RLIMIT_CORE resource limit (%(exc)s)"
             % vars())
         raise error
 
@@ -547,7 +546,7 @@ def prevent_core_dump():
     core_limit = (0, 0)
     resource.setrlimit(core_resource, core_limit)
 
-
+
 def detach_process_context():
     """ Detach the process context from parent and session.
 
@@ -571,18 +570,18 @@ def detach_process_context():
             pid = os.fork()
             if pid > 0:
                 os._exit(0)
-        except OSError, exc:
+        except OSError as exc:
             exc_errno = exc.errno
             exc_strerror = exc.strerror
             error = DaemonProcessDetachError(
-                u"%(error_message)s: [%(exc_errno)d] %(exc_strerror)s" % vars())
+                "%(error_message)s: [%(exc_errno)d] %(exc_strerror)s" % vars())
             raise error
 
-    fork_then_exit_parent(error_message=u"Failed first fork")
+    fork_then_exit_parent(error_message="Failed first fork")
     os.setsid()
-    fork_then_exit_parent(error_message=u"Failed second fork")
+    fork_then_exit_parent(error_message="Failed second fork")
 
-
+
 def is_process_started_by_init():
     """ Determine if the current process is started by `init`.
 
@@ -613,7 +612,7 @@ def is_socket(fd):
     try:
         socket_type = file_socket.getsockopt(
             socket.SOL_SOCKET, socket.SO_TYPE)
-    except socket.error, exc:
+    except socket.error as exc:
         exc_errno = exc.args[0]
         if exc_errno == errno.ENOTSOCK:
             # Socket operation on non-socket
@@ -663,7 +662,7 @@ def is_detach_process_context_required():
 
     return result
 
-
+
 def close_file_descriptor_if_open(fd):
     """ Close a file descriptor if already open.
 
@@ -673,14 +672,14 @@ def close_file_descriptor_if_open(fd):
         """
     try:
         os.close(fd)
-    except OSError, exc:
+    except OSError as exc:
         if exc.errno == errno.EBADF:
             # File descriptor was not open
             pass
         else:
             error = DaemonOSEnvironmentError(
-                u"Failed to close file descriptor %(fd)d"
-                u" (%(exc)s)"
+                "Failed to close file descriptor %(fd)d"
+                " (%(exc)s)"
                 % vars())
             raise error
 
@@ -711,11 +710,11 @@ def close_all_open_files(exclude=set()):
 
         """
     maxfd = get_maximum_file_descriptors()
-    for fd in reversed(range(maxfd)):
+    for fd in reversed(list(range(maxfd))):
         if fd not in exclude:
             close_file_descriptor_if_open(fd)
 
-
+
 def redirect_stream(system_stream, target_stream):
     """ Redirect a system stream to a specified file.
 
@@ -733,7 +732,7 @@ def redirect_stream(system_stream, target_stream):
         target_fd = target_stream.fileno()
     os.dup2(target_fd, system_stream.fileno())
 
-
+
 def make_default_signal_map():
     """ Make the default signal map for this system.
 
@@ -742,10 +741,10 @@ def make_default_signal_map():
 
         """
     name_map = {
-        u'SIGTSTP': None,
-        u'SIGTTIN': None,
-        u'SIGTTOU': None,
-        u'SIGTERM': u'terminate',
+        'SIGTSTP': None,
+        'SIGTTIN': None,
+        'SIGTTOU': None,
+        'SIGTERM': 'terminate',
         }
     signal_map = dict(
         (getattr(signal, name), target)
