@@ -1,0 +1,8 @@
+build/
+dist/
+python_daemon.egg-info/
+*.pyc
+*.pyo
+*~
+*.swp
+.directory
