@@ -25,9 +25,9 @@ version = main_module.version
 short_description, long_description = (
     textwrap.dedent(d).strip()
     for d in main_module.__doc__.split(u'\n\n', 1)
-    )
+)
 
-
+
 setup(
     name=distribution_name,
     version=version.version,
@@ -37,12 +37,12 @@ setup(
     zip_safe=False,
     test_suite=u"test.suite",
     tests_require=[
-        u"MiniMock >=1.2.2",
-        ],
+        u"MiniMock >=1.2.8",
+    ],
     install_requires=[
         u"setuptools",
-        u"lockfile >=0.7",
-        ],
+        u"lockfile >=0.9.1",
+    ],
 
     # PyPI metadata
     author=version.author_name,
@@ -60,5 +60,5 @@ setup(
         u"Programming Language :: Python",
         u"Intended Audience :: Developers",
         u"Topic :: Software Development :: Libraries :: Python Modules",
-        ],
-    )
+    ],
+)
