@@ -1,4 +1,6 @@
 include MANIFEST.in
 include LICENSE.*
 include ChangeLog
+recursive-include daemon *.py
 recursive-include doc *
+recursive-include test *.py
