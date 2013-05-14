@@ -9,3 +9,4 @@ python_daemon.egg-info/
 .directory
 stderr_file.txt
 stdout_file.txt
+.python-version
